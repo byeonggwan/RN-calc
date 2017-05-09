@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  TouchableHighlight
 } from 'react-native';
 
 export default class likearts extends Component {
@@ -21,19 +22,43 @@ export default class likearts extends Component {
   }
 
   buttonPressed(i){
-    this.setState({
-      equation: this.state.equation + i,
-    })
+    if(i == "="){
+      this.setState({
+        equation: eval(this.state.equation).toString()
+      })
+    }
+    else if(i == "DEL"){
+      this.setState({
+        equation: this.state.equation.substr(0,this.state.equation.length-1)
+      })
+    }
+    else if(i == "RE"){
+      this.setState({
+        equation: ""
+      })
+    }
+    else if(i == "?"){
+      alert("Made by Byeonggwan")
+    }
+    else {
+      this.setState({
+        equation: this.state.equation + i,
+      })
+    }
   }
+
 
   listNum(number){
     const listNum = number.map((num) =>
-        <View style = {styles.buttoncase}>
-          <Button
+        <View style = {styles.buttonContainer}>
+          <TouchableHighlight
             onPress = {() => this.buttonPressed(num)} //()=>의 의미, 왜필요한지 모름
             key = {num}
             title = {num}
-          />
+            style = {styles.button}
+          >
+            <Text style = {styles.showText}> {num} </Text>
+          </TouchableHighlight>
         </View>
     );
     return(
@@ -45,20 +70,35 @@ export default class likearts extends Component {
     return (
       <View style={styles.container}>
         <View style = {styles.top}>
-          <Text> {this.state.equation} </Text>
+          <View style = {styles.alignCenter}>
+            <Text> Simple Calculator </Text>
+          </View>
+          <View style = {styles.alignCenter}>
+            <View style = {{flex:1}}></View>
+            <View style = {styles.textLine}>
+              <Text style = {styles.showText}> {this.state.equation} </Text>
+            </View>
+            <View style = {{flex:1}}></View>
+          </View>
+          <View style = {styles.alignCenter}>
+            <Text> ☆시공좋아★ </Text>
+          </View>
         </View>
         <View style = {styles.bot}>
-          <View style={styles.button3}>
-            {this.listNum(["1","2","3"])}
+          <View style={styles.buttons}>
+            {this.listNum(["?","/","RE","DEL"])}
           </View>
-          <View style={styles.button3}>
-            {this.listNum(["4","5","6"])}
+          <View style={styles.buttons}>
+            {this.listNum(["7","8","9","*"])}
           </View>
-          <View style={styles.button3}>
-            {this.listNum(["7","8","9"])}
+          <View style={styles.buttons}>
+            {this.listNum(["4","5","6","+"])}
           </View>
-          <View style={styles.button3}>
-            {this.listNum(["+","-","="])}
+          <View style={styles.buttons}>
+            {this.listNum(["1","2","3","-"])}
+          </View>
+          <View style={styles.buttons}>
+            {this.listNum([".","0","00","="])}
           </View>
         </View>
       </View>
@@ -73,21 +113,45 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   },
 
-  button3: {
+  buttons: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
   },
 
-  buttoncase: {
+  buttonContainer:{
     flex: 1,
-    alignItems: 'center'
+    borderWidth: 1,
+    borderColor: '#808080'
+  },
+
+  button:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  alignCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+
+  showText:{
+    fontSize: 30,
+    color: '#000000'
+  },
+
+  textLine: {
+    flex: 4,
+    alignItems: 'flex-end',
+    borderBottomWidth: 1,
+    borderColor: '#808080'
   },
 
   top: {
-    alignItems: 'center',
     flex: 1,
-    justifyContent: 'center'
+    flexDirection: 'column'
   },
 
   bot: {
